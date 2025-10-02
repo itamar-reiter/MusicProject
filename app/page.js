@@ -7,12 +7,16 @@ import { useState } from "react";
 import { CurrentPage, sampleSongs } from "../utils/utils";
 import Closure from "./closure/closure";
 import IntroForm from "./introForm/introForm";
+import { delayUntilRuntimeStage } from "next/dist/server/app-render/dynamic-rendering";
+// import mainApi from "@/utils/mainApi";
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(CurrentPage.SIGNUP);
 
   const [loaderHeadline, setLoaderHeadline] = useState("");
   const [loaderRedirect, setLoaderRedirect] = useState(CurrentPage.USER_INPUT);
+
+  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const onUserInputSubmit = (userInput) => {
     setLoaderHeadline("searching for songs right for your mood...");
@@ -34,10 +38,23 @@ export default function Home() {
     setCurrentPage(CurrentPage.USER_INPUT);
   };
 
-  const onSignupSubmit = () => {
-    // MainApi.signUp();
-    setTimeout(2000);
-    setCurrentPage(CurrentPage.USER_INPUT);
+  const onSignupSubmit = (email, password, name) => {
+    // mainApi
+    //   .signup(email, password, name)
+    //   .then((res) => {
+    //     if (res._id) {
+    //       setSignupSuccess(true);
+    //       setTimeout(2000);
+    //       setCurrentPage(CurrentPage.USER_INPUT);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    setSignupSuccess(true);
+    setTimeout(() => {
+      setCurrentPage(CurrentPage.LOGiN);
+    }, 2000);
   };
 
   const onLoginSubmit = () => {
@@ -59,12 +76,13 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         {currentPage === CurrentPage.SIGNUP && (
           <IntroForm
-            inputs={["email", "password"]}
+            inputs={["email", "password", "name"]}
             buttonText={"Submit"}
             onSubmit={onSignupSubmit}
             relativePathText={"click to log in"}
             onRelativePathPress={toggleIntroFormState}
             headline={"Sign up now!"}
+            signupSuccess={signupSuccess}
           />
         )}
         {currentPage === CurrentPage.LOGIN && (

@@ -7,6 +7,7 @@ export default function IntroForm({
   relativePathText,
   onRelativePathPress,
   headline,
+  signupSuccess,
 }) {
   const [inputsValue, setInputsValue] = useState(() =>
     Array(inputs?.length || 0).fill("")
@@ -86,6 +87,11 @@ export default function IntroForm({
               className="text-center text-purple-300 hover:text-purple-200 cursor-pointer underline transition-colors duration-300"
             >
               {relativePathText}
+            </p>
+          )}
+          {signupSuccess && (
+            <p className="text-center text-green-400 font-semibold bg-green-900/20 border border-green-500/30 rounded-lg py-3 px-4 transition-all duration-300">
+              Signup succeeded! Login to download playlist as you like.
             </p>
           )}
         </form>
