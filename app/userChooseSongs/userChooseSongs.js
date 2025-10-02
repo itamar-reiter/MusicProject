@@ -24,63 +24,105 @@ export default function UserChooseSongs({ songs = [], onSubmit }) {
   };
 
   return (
-    <div className="min-h-screen p-8 flex flex-col items-center justify-center">
-      <div className="max-w-2xl w-full">
-        <h2 className="text-3xl font-bold text-center mb-2">Choose Your Songs</h2>
-        <p className="text-center mb-8 text-gray-600">
-          Select the songs you would like in your playlist ({selectedSongs.length} selected)
-        </p>
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Floating Music Notes */}
+      <div className="absolute top-20 left-20 animate-bounce">
+        <div className="text-4xl text-purple-300 opacity-60">♪</div>
+      </div>
+      <div
+        className="absolute top-32 right-24 animate-bounce"
+        style={{ animationDelay: "0.5s" }}
+      >
+        <div className="text-3xl text-blue-300 opacity-60">♫</div>
+      </div>
+      <div
+        className="absolute bottom-32 left-32 animate-bounce"
+        style={{ animationDelay: "1s" }}
+      >
+        <div className="text-5xl text-pink-300 opacity-60">♪</div>
+      </div>
+      <div
+        className="absolute bottom-20 right-20 animate-bounce"
+        style={{ animationDelay: "1.5s" }}
+      >
+        <div className="text-4xl text-indigo-300 opacity-60">♫</div>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {songs.map((song, index) => (
-            <div 
-              key={`${song.song}-${song.author}-${index}`}
-              className="flex items-center p-4 border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-black transition-colors"
-            >
-              <input
-                type="checkbox"
-                id={`song-${index}`}
-                checked={isSelected(song)}
-                onChange={(e) => handleCheckboxChange(song, e.target.checked)}
-                className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-4"
-              />
-              <label 
-                htmlFor={`song-${index}`}
-                className="flex-1 cursor-pointer"
+      {/* Main Content Container */}
+      <div className="flex flex-col items-center space-y-8 z-10 w-full max-w-4xl px-4">
+        
+        {/* Header Section */}
+        <div className="text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-purple-400 mb-4 font-mono tracking-wider">
+            Choose Your Songs 🎵
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full mb-6"></div>
+          <p className="text-xl text-gray-300 font-semibold tracking-wide">
+            Select the songs you&apos;d like in your playlist
+          </p>
+          <p className="text-lg text-purple-300 mt-2">
+            ({selectedSongs.length} selected)
+          </p>
+        </div>
+
+        {/* Songs List Container */}
+        <div className="w-full max-h-96 overflow-y-auto bg-gray-800/30 backdrop-blur-sm rounded-lg border border-gray-600/50 p-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
+            {songs.map((song, index) => (
+              <div 
+                key={`${song.song}-${song.author}-${index}`}
+                className={`flex items-center p-4 rounded-lg transition-all duration-300 border ${
+                  isSelected(song)
+                    ? 'bg-purple-600/20 border-purple-500/50 shadow-lg'
+                    : 'bg-gray-800/50 border-gray-600 hover:bg-gray-700/50 hover:border-purple-500/30'
+                }`}
               >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-semibold text-lg">{song.song}</h3>
-                    <p className="text-gray-600">by {song.author}</p>
+                <input
+                  type="checkbox"
+                  id={`song-${index}`}
+                  checked={isSelected(song)}
+                  onChange={(e) => handleCheckboxChange(song, e.target.checked)}
+                  className="w-5 h-5 text-purple-600 bg-gray-700 border-gray-500 rounded focus:ring-purple-500 focus:ring-2 mr-4 accent-purple-500"
+                />
+                <label 
+                  htmlFor={`song-${index}`}
+                  className="flex-1 cursor-pointer"
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className="font-semibold text-lg text-white">{song.song}</h3>
+                      <p className="text-gray-300">by {song.author}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-sm text-gray-400">{song.year}</span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-sm text-gray-500">{song.year}</span>
-                  </div>
-                </div>
-              </label>
-            </div>
-          ))}
+                </label>
+              </div>
+            ))}
 
-          {songs.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-gray-500">No songs available</p>
-            </div>
-          )}
+            {songs.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-gray-400 text-lg">No songs available</p>
+              </div>
+            )}
+          </form>
+        </div>
 
-          <div className="flex justify-center gap-4 pt-6">
-            <button
-              type="submit"
-              disabled={selectedSongs.length === 0}
-              className={`px-8 py-3 rounded-md font-semibold transition-colors ${
-                selectedSongs.length > 0
-                  ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }`}
-            >
-              Create Playlist ({selectedSongs.length} songs)
-            </button>
-          </div>
-        </form>
+        {/* Submit Button */}
+        <div className="flex justify-center pt-4">
+          <button
+            onClick={handleSubmit}
+            disabled={selectedSongs.length === 0}
+            className={`px-8 py-4 rounded-lg font-bold text-lg tracking-wide transition-all duration-300 transform shadow-2xl border ${
+              selectedSongs.length > 0
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 hover:scale-105 border-purple-500 cursor-pointer'
+                : 'bg-gray-700 text-gray-400 border-gray-600 cursor-not-allowed'
+            }`}
+          >
+            Create Playlist ✨ ({selectedSongs.length} songs)
+          </button>
+        </div>
       </div>
     </div>
   );
